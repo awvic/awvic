@@ -1,0 +1,37 @@
+// A simmple cpp syntax description for AWVIC.
+// json file format with comments available.
+
+// Notice: json escape character + regular expression escape character makes following notation ugly.
+
+// The order of rules is matter.
+
+// /t tab 的處理：type=1 時要考慮內含\t的情形，在regular expression pattern比對時有處理這樣的狀況
+// /t 一定要加在type=2的某一個rule內，tab的處理才會正常。
+
+{
+
+    "language" : "text", // Name of the syntax.
+
+    "syntax_rule":
+    [
+        {
+            "name": "operator",
+            "pid": 1,
+            "re" : "(\\t)",
+            "type" : 2,
+            "regroup": 0            
+        },
+        
+        {
+            "name": "hint",
+            "pid": 999,
+            "re" : "\\b(\\w{1,}?)\\b",
+            "type" : 3,
+            "regroup": 0            
+        } 
+       
+    ]
+       
+    // delimiter : /* */ :: : ( ) [ ] - . + ! ~ * & / % < > = ^ | ? , ; { }
+
+}

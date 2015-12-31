@@ -1,0 +1,111 @@
+// A simmple Theme for AWVIC. Actually not compilcate like a thme just colors setting.
+// json file format with comments available.
+
+// must have "_DEFAULT" and "_SELECTED"
+
+{
+
+    "name" : "Simple", // Name of the theme.
+
+    "class" : [
+
+        {
+            "id" : "_DEFAULT",
+            "fg" : [220,220,220],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "_SELECTED",
+            "fg" : [120,120,120],
+            "bg" : [73,72,62]
+        },
+
+        {
+            "id" : "_FIND",
+            "fg" : [130,130,130],
+            "bg" : [73,72,62]
+        },
+
+        {
+            "id" : "_LINE_IND",
+            "fg" : [155,155,155],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "_FOLDING",
+            "fg" : [230,230,230],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "_EMBRACE",
+            "fg" : [116,116,116],
+            "bg" : [39,40,34]
+        },
+        
+        {
+            "id" : "keyword",
+            "fg" : [239,239,239],
+            "bg" : [39,40,34]
+        },
+
+        {   
+            "id" : "operator",
+            "fg" : [215,215,215],
+            "bg" : [39,40,34]
+        },
+
+        //{
+        //    "id" : "delimiter",
+        //    "fg" : [128,128,128],
+        //    "bg" : [39,40,34]
+        //},
+
+        {
+            "id" : "linecomment",
+            "fg" : [123,123,123],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "blockcomment",
+            "fg" : [123,123,123],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "preprocessor",
+            "fg" : [114,114,114],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "string",
+            "fg" : [136,136,136],
+            "bg" : [39,40,34]
+        },
+        
+        {
+            "id" : "function",
+            "fg" : [166,166,166],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "definition",
+            "fg" : [176,176,176],
+            "bg" : [39,40,34]
+        },
+
+        {
+            "id" : "datatype",
+            "fg" : [102,102,102],
+            "bg" : [39,40,34]
+        }
+
+        
+    ]
+
+}

@@ -1,0 +1,155 @@
+// A simmple cpp syntax description for AWVIC.
+// json file format with comments available.
+
+// Notice: json escape character + regular expression escape character makes following notation ugly.
+
+// The order of rules is matter.
+// 規則出現的順序會影響程式處理的結果
+
+// /t tab 的處理：type=1 時要考慮內含\t的情形，在regular expression pattern比對時有處理這樣的狀況
+// /t 一定要加在type=2的某一個rule內，tab的處理才會正常。
+// 空白 一定要加在type=2的某一個rule內，tab的處理才會正常。
+
+// "name" of "rule" is corresponding to "id" of simple.svthm, and can be duplicate in xxx.svsyn
+// name 必須與 xxx.svthm 的 id 相對應
+// "pid" of "rule" sould be unique.
+// pid 必須是唯一的
+
+// type explanation
+// type : 0  block comment like c++ /* */ 
+//           If there are many block comment rule, prioriry by it appearing orde on this file.
+//           block comment rules should be place in the head.
+//           區塊型的規則，如 c++ /* */
+// type : 1  line comment like c++ //
+//           行註解
+//           或符號比對
+// type : 2  keyword match
+//           關鍵字比對
+// type : 3  typing hint: any word in the file match \b(\w)\b
+//           任何字
+
+// pid : 0 ~ 9 is reserved for default text (no syntax hilight words)
+// pid from 0 ~ 9 will use the _DEFAULT theme style.
+// pid 0~9 是保留給awvic處理使用的，勿用
+// pid 0~9 使用 xxx.svthm 的 _DEFAULT 樣式
+
+{
+
+    "language" : "python", // Name of the syntax.
+
+    "syntax_rule":
+    [
+        {
+            "name": "string",
+            "pid": 12,
+            "re" : "(''')",
+            "blockre" : "(/\\*.*?\\*/)",  
+            "comment" :         
+            {
+                "start" : "'''",
+                "end" : "'''"
+            },
+
+            "type" : 0,
+            "regroup": 0            
+        },
+		
+        {
+            "name": "linecomment",
+            "pid": 10,
+            "re" : "((#.*?)(\\r\\n|\\n|\\r|$))",
+            "type": 1,
+            "regroup": 2
+        },
+		
+        {
+            "name": "string",
+            "pid": 11,
+            "re" : "(\"(.+?)\"|'(.+?)')",
+            "type": 1,
+            "regroup": 1
+        },     
+		
+        {
+            "name": "function",
+            "pid": 16,
+            "re" : "\\b((\\w+?)\\(.+?\\))",
+            "type": 1,
+            "regroup": 2
+        },      
+		
+        {
+            "name": "preprocessor",
+            "pid": 13,
+            "re" : "(import|from)",
+            "type" : 2,
+            "regroup": 0            
+        },    
+		
+        {
+            "name": "keyword",
+            "pid": 14,
+            "re" : "\\b(as|elif|global|or|with|assert|else|if|pass|yield|break|except|print|class|exec|in|raise|continue|finally|is|return|def|for|lambda|try)\\b",
+            "type" : 2,
+            "regroup": 0            
+        },
+		
+        {
+            "name": "operator",
+            "pid": 15,
+            "re" : "(::|\\(\\)|\\[\\]|->|\\.|\\+\\+|--|!|~|\\+|-|\\*|&|->\\*|\\.\\*|/|%|<<|>>|>|>=|<|<=|==|!=|\\^|\\||&&|\\|\\||\\?:|=|/+=|-=|\\*=|/=|%=|&=|\\^=|\\|=|<<=|>>=|,|\\(|\\)|\\[|\\]|;|\\{|\\}|\\t| )",
+            "type" : 2,
+            "regroup": 0            
+        },
+		
+        {
+            "name": "hint",
+            "pid": 999,
+            "re" : "\\b(\\w{1,}?)\\b",
+            "type" : 3,
+            "regroup": 0            
+        }        
+       
+    ],
+       
+    // delimiter : /* */ :: : ( ) [ ] - . + ! ~ * & / % < > = ^ | ? , ; { }
+	
+	
+    "embrace_rule":
+    [
+
+        {
+            "name": "embrace01",
+            "pid": 801,
+            "start" : "(",
+            "end"   : ")",
+            "type" : 101
+        },
+
+        {
+            "name": "embrace02",
+            "pid": 802,
+            "start" : "{",
+            "end"   : "}",
+            "type" : 101
+        },
+
+        {
+            "name": "folding01",
+            "pid": 803,
+            "start" : "{",
+            "end"   : "}",
+            "type" : 102,
+            "folding_type" : 0
+        },
+
+        {
+            "name": "folding02",
+            "pid": 804,
+            "start" : "'''",
+            "end"   : "'''",
+            "type" : 102,
+            "folding_type" : 0
+        }
+    ]
+}

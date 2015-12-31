@@ -1,0 +1,204 @@
+// A simmple cpp syntax description for AWVIC.
+// json file format with comments available.
+
+// Notice: json escape character + regular expression escape character makes following notation ugly.
+
+// The order of rules is matter.
+// 規則出現的順序會影響程式處理的結果
+
+// /t tab 的處理：type=1 時要考慮內含\t的情形，在regular expression pattern比對時有處理這樣的狀況
+// /t 一定要加在type=2的某一個rule內，tab的處理才會正常。
+// 空白 一定要加在type=2的某一個rule內，tab的處理才會正常。
+
+// "name" of "rule" is corresponding to "id" of simple.svthm, and can be duplicate in xxx.svsyn
+// name 必須與 xxx.svthm 的 id 相對應
+// "pid" of "rule" sould be unique.
+// pid 必須是唯一的
+
+// type explanation
+// type : 0  block comment like c++ /* */ 
+//           If there are many block comment rule, prioriry by it appearing orde on this file.
+//           block comment rules should be place in the head.
+//           區塊型的規則，如 c++ /* */
+// type : 1  line comment like c++ //
+//           行註解
+//           或符號比對
+// type : 2  keyword match
+//           關鍵字比對
+// type : 3  typing hint: any word in the file match \b(\w)\b
+//           任何字
+// type : 101  embrace keyword: embrace keyword like {} () in C
+//           embrace 符號也要出現在 operator 符號內          
+//           embrace symbol appearance order is matter.
+// type : 102  folding keyword: embrace keyword like {} in C
+//           folding 符號也要出現在 operator 符號內          
+
+
+// folding_type : 0    C style folding processing rules
+// folding_type : 1    Python style folding processing rules
+
+
+// pid : 0 ~ 9 is reserved for default text (no syntax hilight words)
+// pid from 0 ~ 9 will use the _DEFAULT theme style.
+// pid 0~9 是保留給awvic處理使用的，勿用
+// pid 0~9 使用 xxx.svthm 的 _DEFAULT 樣式
+
+
+
+{
+
+    "language" : "cpp", // Name of the syntax.
+
+    "syntax_rule":
+    [
+        {
+            "name": "blockcomment",
+            "pid": 12,
+            "re" : "(/\\*|\\*/)",
+            "blockre" : "(/\\*.*?\\*/)",
+            "comment" :
+            {
+                "start" : "/*",
+                "end" : "*/"
+            },
+            //"re" :
+            //{
+            //   "start" : "(/\\*)+",
+            //    "end" : "(\\*/)+"
+            //},
+            "type" : 0,
+            "regroup": 0            
+        },
+		
+        {
+            "name": "linecomment",
+            "pid": 10,
+            "re" : "((//.*?)(\\r\\n|\\n|\\r|$))",
+            "type": 1,
+            "regroup": 2,
+            "comment":
+            {
+                "comment1" : "//",
+                "comment2" : ""
+            }
+        },
+		
+        {
+            "name": "string",
+            "pid": 11,
+            "re" : "(\"(.+?)\"|'(.+?)')",
+            "type": 1,
+            "regroup": 1
+        },     
+		
+        {
+            "name": "definition",
+            "pid": 18,
+            "re" : "\\b((\\w+?::\\w+?)\\(.{0,}\\))\\s*\\{?\\s*(\\r\\n|\\n|\\r|$)",
+            //"re" : "\\b((\\w+?::\\w+?)\\(.{0,}\\))",
+            //"re" : "\b((\w+?::\w+?)\(.{0,}\))",
+            "type": 1,
+            "regroup": 2         
+        },	
+		
+        {
+            "name": "function",
+            "pid": 17,
+            "re" : "\\b((\\w+?)\\(.*?\\))",
+            "type": 1,
+            "regroup": 2
+        },
+		
+        {
+            "name": "preprocessor",
+            "pid": 13,
+            "re" : "(#define|#include|#endif|#ifdef|#ifndef|#undef|preprocessor|#if|#endif|#else|#elif|#line|#error|#progma)",
+            "type" : 2,
+            "regroup": 0            
+        },      
+		
+        {
+            "name": "keyword",
+            "pid": 14,
+            "re" : "\\b(and|default|noexcept|template|and_eq|delete|not|this|alignof|double|not_eq|thread_local|asm|dynamic_cast|nullptr|throw|auto|else|operator|true|bitand|enum|or|try|bitor|explicittodo|or_eq|typedef|export|private|typeid|break|externtodo|protected|typename|case|false|public|union|catch|using|for|reinterpret_cast|friend|return|goto|class|if|virtual|compl|inline|sizeof|volatile|const|static|while|constexpr|static_assert|xor|const_cast|mutable|static_cast|xor_eq|new)\\b",
+            "type" : 2,
+            "regroup": 0            
+        },
+
+        {
+            "name": "datatype",
+            "pid": 15,
+            "re" : "\\b(float|register|char|unsigned|char16_t|void|char32_t|short|wchar_t|signed|int|static|long|bool|size_t|vector|map|set)\\b",
+            "type" : 2,
+            "regroup": 0            
+        },
+
+        {
+            "name": "operator",
+            "pid": 16,
+            "re" : "(::|\\(\\)|\\[\\]|->|\\.|\\+\\+|--|!|~|\\+|-|\\*|&|->\\*|\\.\\*|/|%|<<|>>|>|>=|<|<=|==|!=|\\^|\\||&&|\\|\\||\\?:|=|/+=|-=|\\*=|/=|%=|&=|\\^=|\\|=|<<=|>>=|,|\\(|\\)|\\[|\\]|;|\\{|\\}|\\t| )",
+            "type" : 2,
+            "regroup": 0            
+        },
+
+        {
+            "name": "hint",
+            "pid": 999,
+            "re" : "\\b(\\w{1,}?)\\b",
+            "type" : 3,
+            "regroup": 0            
+        }
+
+    ],
+
+    "embrace_rule":
+    [
+
+        {
+            "name": "embrace01",
+            "pid": 801,
+            "start" : "(",
+            "end"   : ")",
+            "type" : 101
+        },
+
+        {
+            "name": "embrace02",
+            "pid": 802,
+            "start" : "{",
+            "end"   : "}",
+            "type" : 101
+        },
+
+        {
+            "name": "folding",
+            "pid": 803,
+            "start" : "{",
+            "end"   : "}",
+            "type" : 102,
+            "folding_type" : 0
+        },
+
+        {
+            "name": "folding2",
+            "pid": 804,
+            "start" : "/*",
+            "end"   : "*/",
+            "type" : 102,
+            "folding_type" : 0
+        }
+
+    ],
+	
+    // Goto definition rules. can be more than one rules setting if needed.
+	"definition_pid" : 
+    [
+        {
+            "pid": 18
+        }
+    ]
+	
+    // delimiter : /* */ :: : ( ) [ ] - . + ! ~ * & / % < > = ^ | ? , ; { }
+    //"re" : "(::|\\(\\)|\\[\\]|->|\\.|\\+\\+|--|!|~|\\+|-|\\*|&|->\\*|\\.\\*|/|<<|>>|>|>=|<|<=|==|!=|\\^|\\||&&|\\|\\||\\?:|=|/+=|-=|\\*=|/=|&=|\\^=|\\|=|<<=|>>=|,|\\(|\\)|\\[|\\]|;|\\{|\\}|\\t| )",
+
+}

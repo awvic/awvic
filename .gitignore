@@ -45,3 +45,40 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+
+# awvic folder ignore files.
+build/CMakeFiles/
+build/cmake_install.cmake
+build/CMakeCache.txt
+build/Makefile
+bin/awvic*
+!bin/awvic.ini
+bin/log.txt
+bin64/awvic*
+!bin64/awvic.ini
+bin64/log.txt
+bin64/icu*
+src/*~
+src/*sublime-workspace
+vc2012/awvic/Debug
+vc2012/awvic/Release
+vc2012/awvic/*sdf
+vc2013/awvic/Debug
+vc2013/awvic/Release
+vc2013/awvic/x64
+vc2013/awvic/*sdf
+vc2013/awvic/*suo
+bin/testcase/huge*
+test/Debug
+test/testcase
+test/*obj
+test/*exe
+test/*sdf
+test/*suo
+test/*sln
+test/*vcxproj*
+test/*dll
+test/__pycache__/
+test/cl
+test/src/huge*
