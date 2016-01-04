@@ -24,6 +24,7 @@ d. More customizable.
 2. How to build Awvic.
 
 Awvic is written in C++ with wxWidgets, ICU and jsoncpp. You have to install these library before build Awvic. I am using CMake & Visual Studio C++ 2013 Express to build Awvic in Windows, and using CMake to build in Linux. There should be no problem to build Awvic with other building tools you familiar with. As for OSX, I don't have the environment to testing now, but the way to build should be the same with CMake too.
+To build awvic with Visual Studio 2013 on Windows. Please set system variables WXWIN and ICU_DI. WXWIN for wxWidgets library path and ICU_DIR for icu library path. Or you can modify the setting to your environment path on Visual Studio's project property.
 
 Library require to build Awvic:
 a. C++11 compiler (A few C++11 features were used).
