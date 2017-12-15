@@ -598,8 +598,8 @@ void svCommandLineCtrl::SetCommandType(char p_commandType)
     else if (m_commandType==SVID_CMD_GOTO_LINE)
     {
         lblMsg->SetLabel(_("G"));
-        vSizer12->Clear(true);
-        vSizer12->Layout();
+        //vSizer12->Clear(true);
+        //vSizer12->Layout();
         this->SetSize(this->GetSize().GetWidth(), bSizer6->GetSize().GetHeight());
         this->Layout();
         txtCommand->SetValue(_(""));

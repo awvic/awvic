@@ -39,3 +39,12 @@ a. CMake 3.1.0 (Later version sould be all right).
 3. License.
 
 See the LICENSE Notice on src/awvic.cpp. In summary, Awvic is licensed under the Revised BSD License.
+
+
+
+
+4. Miscellaneous functions had been done so far.
+
+a. Ctrl+F3 for searching current world with F3 for next search and Ctrl+F3 to search previous.
+b. Ctrl+F for search panel.
+c. Ctrl+G for goto line #.
