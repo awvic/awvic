@@ -54,9 +54,11 @@ build/CMakeCache.txt
 build/Makefile
 bin/awvic*
 !bin/awvic.ini
+bin/*.dll
 bin/log.txt
 bin64/awvic*
 !bin64/awvic.ini
+bin64/*.dll
 bin64/log.txt
 bin64/icu*
 src/*~
