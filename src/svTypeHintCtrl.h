@@ -36,7 +36,8 @@ enum
 };
 
 // class svTypeHintCtrl : public wxDialog
-class svTypeHintCtrl : public wxFrame
+class svTypeHintCtrl : public wxFrame  // We set it as a wxFrame so it can be display event outside of it's parent window. 但是母視窗(svMainFrame)會因為 lost focus 而畫面閃動一下。
+// class svTypeHintCtrl : public wxWindow
 {
 public:
     // svTypeHintCtrl(svMainFrame *p_mainFrame, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 180,180 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxT("svTypeHintCtrl"));

@@ -46,6 +46,8 @@ EVT_SPLITTER_DCLICK(wxID_ANY, svMainFrame::OnSashDoubleClick)
 EVT_CHAR(                 svMainFrame::OnChar)
 //EVT_SET_FOCUS(            svMainFrame::OnSetFocus)
 //EVT_ACTIVATE(             svMainFrame::OnActivate)
+// EVT_KEY_DOWN(svMainFrame::OnKeyDown)
+// EVT_SET_FOCUS(svMainFrame::OnSetFocus)
 END_EVENT_TABLE()
 
 //#include "ompte.xpm"
@@ -655,6 +657,17 @@ void svMainFrame::OnChar(wxKeyEvent& event)
         ShowHideSideBar();
     }
 }
+
+// void svMainFrame::OnKeyDown(wxKeyEvent& event)
+// {
+
+//     int a = 1; // for debug
+// }
+
+// void svMainFrame::OnSetFocus(wxFocusEvent& event)
+// {
+//     int a = 1; // for debug
+// }
 
 void svMainFrame::OnAuiNotebookPageClose(wxAuiNotebookEvent& event)
 {

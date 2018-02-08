@@ -90,6 +90,9 @@
     <ClCompile Include="..\..\src\svTypeHintCtrl.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\svListBoxCtrl.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\stdwx.h">
@@ -168,6 +171,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\svTypeHintCtrl.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\svListBoxCtrl.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

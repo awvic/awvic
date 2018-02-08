@@ -75,6 +75,7 @@ EVT_MOTION(svTextEditorCtrl::OnMouseMotion)
 EVT_MOUSEWHEEL(svTextEditorCtrl::OnMouseWheel)
 //EVT_LEAVE_WINDOW(svTextEditorCtrl::OnMouseLeaveWindow)
 //EVT_m_bufText_EVENT(wxID_ANY, svTextEditorCtrl::OnModified)
+// EVT_CHILD_FOCUS(svTextEditorCtrl::OnChildFocus)
 END_EVENT_TABLE()
 
 
@@ -258,9 +259,10 @@ svTextEditorCtrl::svTextEditorCtrl(svMainFrame *mainFrame, wxWindow *parent, wxW
 
     // m_typeHintCtrl = new svTypeHintCtrl(m_mainFrame, this, wxID_ANY, wxDefaultPosition, wxSize(150, 140), wxBORDER_NONE|wxCLIP_CHILDREN|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT );
     m_typeHintCtrl = new svTypeHintCtrl(this, this, wxID_ANY, wxDefaultPosition, wxSize(150, 140), wxBORDER_NONE|wxCLIP_CHILDREN|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT );
+    m_listBoxCtrl = new svListBoxCtrl(this, SVID_LB01, wxDefaultPosition, wxSize(200, 200));
 
-    // m_typeHintCtrl->Bind(wxEVT_KEY_DOWN, &svTextEditorCtrl::OnKeyDown, this);
-    // m_typeHintCtrl->Bind(wxEVT_CHAR, &svTextEditorCtrl::OnChar, this);
+    m_listBoxCtrl->Move(10, 10);
+    m_listBoxCtrl->Hide();
 
 }
 
@@ -294,6 +296,7 @@ svTextEditorCtrl::~svTextEditorCtrl()
     delete m_mouseMotionTimer;
 
     if (m_typeHintCtrl) delete m_typeHintCtrl;
+    if (m_listBoxCtrl) delete m_listBoxCtrl;
 
 }
 
@@ -614,11 +617,11 @@ svCommand* svTextEditorCtrl::EmergeTextCommand(const wxKeyEvent& event)
         else
             cmdName = CMD_TXT_RESET_CARETS;     // Reset carets => keep first caret and remove else.  
     }
-    else if (key == WXK_F10)
+    else if (key == WXK_F11)
     {
         cmdName = CMD_TXT_DEBUG01;
     }
-    else if (key == WXK_F11)
+    else if (key == WXK_F12)
     {
         cmdName = CMD_TXT_DEBUG02;
     }
@@ -771,6 +774,18 @@ svCommand* svTextEditorCtrl::EmergeTextCommand2(const wxKeyEvent& event)
             return cmd;
         }
     }
+    else if (key==WXK_F11)
+    {
+        cmdName = CMD_TXT_DEBUG01;
+        svCommand* cmd = new svCommand(cmdName, event);
+        return cmd;
+    }
+    else if (key==WXK_F12)
+    {
+        cmdName = CMD_TXT_DEBUG02;
+        svCommand* cmd = new svCommand(cmdName, event);
+        return cmd;        
+    }
 
     return NULL;
 
@@ -898,12 +913,20 @@ void svTextEditorCtrl::ProcessTextCommand(svCommand* cmd)
     case CMD_SHOW_COMMAND_LINE_GOTO_DEFINITION:
         DoShowHideCommandLine(SVID_CMD_GOTO_DEFINITION);
         break;
-    //case CMD_TXT_DEBUG01:
+    case CMD_TXT_DEBUG01:
         //ShowTypeHint(m_bufText->GetAvailableHint());
         // m_mainFrame->ShowTypeHint(m_bufText->GetAvailableHint());
+        HideTypeHint();
+        m_listBoxCtrl->Show();
+        // m_listBoxCtrl->SetFocus();
+        // SetFocus();
+        DoSmoothRefresh();
         break;
     case CMD_TXT_DEBUG02:
-        // m_mainFrame->HideTypeHint();
+        HideTypeHint();
+        if (m_listBoxCtrl->IsShown())
+            m_listBoxCtrl->Hide();
+        DoSmoothRefresh();
         break;
     }
 
@@ -1062,7 +1085,7 @@ void svTextEditorCtrl::DoTextInsert(svCommand* cmd)
         {
             p_x += m_lniai.Width + m_fai.Width;
             p_y += m_cniai.Height;
-            ClientToScreen(&p_x, &p_y);
+            ClientToScreen(&p_x, &p_y); // We need this convertion if m_typeHistCtrl is a wxFrame.
             m_typeHintCtrl->Move(p_x, p_y);
         }
     }
@@ -1089,7 +1112,7 @@ void svTextEditorCtrl::DoTextInsertHint(const wxString p_str)
             {
                 p_x += m_lniai.Width + m_fai.Width;
                 p_y += m_cniai.Height;
-                ClientToScreen(&p_x, &p_y);
+                ClientToScreen(&p_x, &p_y); // We need this convertion if m_typeHistCtrl is a wxFrame.
                 m_typeHintCtrl->Move(p_x, p_y);
             }
         }
@@ -1129,7 +1152,7 @@ void svTextEditorCtrl::DoTextDelete(svCommand* cmd)
             {
                 p_x += m_lniai.Width + m_fai.Width;
                 p_y += m_cniai.Height;
-                ClientToScreen(&p_x, &p_y);
+                ClientToScreen(&p_x, &p_y); // We need this convertion if m_typeHistCtrl is a wxFrame.
                 m_typeHintCtrl->Move(p_x, p_y);
             }
         }
@@ -1161,7 +1184,7 @@ void svTextEditorCtrl::DoTextBackDelete(svCommand* cmd)
             {
                 p_x += m_lniai.Width + m_fai.Width;
                 p_y += m_cniai.Height;
-                ClientToScreen(&p_x, &p_y);
+                ClientToScreen(&p_x, &p_y); // We need this convertion if m_typeHistCtrl is a wxFrame.
                 m_typeHintCtrl->Move(p_x, p_y);
             }
         }
@@ -3805,4 +3828,3 @@ void svTextEditorCtrl::SetupFont(void)
     }
 
 }
-

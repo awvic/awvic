@@ -104,7 +104,8 @@ public:
 
     void OnSashDoubleClick(wxSplitterEvent& event);
     void OnChar(wxKeyEvent& event);
-
+    // void OnKeyDown(wxKeyEvent& event);
+    // void OnSetFocus(wxFocusEvent& event);
 
 
     void ShowHideFindWindow(void);

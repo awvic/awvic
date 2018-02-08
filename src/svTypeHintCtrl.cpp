@@ -50,6 +50,7 @@ svTypeHintCtrl::svTypeHintCtrl(svTextEditorCtrl *p_txtCtrl, wxWindow* parent, wx
 // svTypeHintCtrl::svTypeHintCtrl(svMainFrame *p_mainFrame, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 // :wxDialog( parent, id, name, pos, size, style )
 :wxFrame( parent, id, name, pos, size, style )
+// :wxWindow( parent, id, pos, size, style )
 {
     m_txtCtrl = p_txtCtrl;
     InitControls();
@@ -168,10 +169,13 @@ void svTypeHintCtrl::OnKeyDown(wxKeyEvent& event)
     }
     else
     {
-        event.Skip();
+        /*event.Skip();
         wxKeyEvent e;
         e = event;
-        m_txtCtrl->OnKeyDown(e);
+        m_txtCtrl->OnKeyDown(e);*/
+
+        event.Skip();
+        GetParent()->ProcessWindowEvent(event);
         // wxLogMessage(wxString::Format("svTypeHintCtrl::OnKeyDown() %i %i", e.m_x, e.m_y));
     }
 
@@ -184,10 +188,13 @@ void svTypeHintCtrl::OnSetFocus(wxFocusEvent& event)
 
 void svTypeHintCtrl::OnChar(wxKeyEvent& event)
 {
-    event.Skip();
+    /*event.Skip();
     wxKeyEvent e;
     e = event;
-    m_txtCtrl->OnChar(e);
+    m_txtCtrl->OnChar(e);*/
+
+    event.Skip();
+    GetParent()->ProcessWindowEvent(event);
     // wxLogMessage(wxString::Format("svTypeHintCtrl::OnChar() %i %i", e.m_x, e.m_y));
 
 }

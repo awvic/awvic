@@ -29,32 +29,35 @@ DEFINE_EVENT_TYPE(svEVT_TEXTCTRL_MSG)
 IMPLEMENT_DYNAMIC_CLASS(svTextCtrlEvent, wxNotifyEvent)*/
 
 
-BEGIN_EVENT_TABLE(svListBoxCtrl, wxWindow)
+// BEGIN_EVENT_TABLE(svListBoxCtrl, wxWindow)
+BEGIN_EVENT_TABLE(svListBoxCtrl, wxControl)
 EVT_PAINT(svListBoxCtrl::OnPaint)
-EVT_ERASE_BACKGROUND(svListBoxCtrl::OnErase)
-EVT_SIZE(svListBoxCtrl::OnSize)
-EVT_CHAR(svListBoxCtrl::OnChar)
-// EVT_KEY_DOWN(svListBoxCtrl::OnKeyDown)
+// EVT_ERASE_BACKGROUND(svListBoxCtrl::OnErase)
+// EVT_SIZE(svListBoxCtrl::OnSize)
+// EVT_CHAR(svListBoxCtrl::OnChar)
+EVT_KEY_DOWN(svListBoxCtrl::OnKeyDown)
 EVT_CLOSE(svListBoxCtrl::OnClose)
-// EVT_SET_FOCUS(svListBoxCtrl::OnSetFocus)
+EVT_SET_FOCUS(svListBoxCtrl::OnSetFocus)
 
-EVT_SVSCROLLBAR_THUMBTRACK(SVID_SVVSB02, svListBoxCtrl::OnVsvScrollThumbTrack) 
-EVT_SVSCROLLBAR_PAGEUP(SVID_SVVSB02, svListBoxCtrl::OnVsvScrollPageUp)
-EVT_SVSCROLLBAR_PAGEDOWN(SVID_SVVSB02, svListBoxCtrl::OnVsvScrollPageDown)
+// EVT_SVSCROLLBAR_THUMBTRACK(SVID_SVVSB02, svListBoxCtrl::OnVsvScrollThumbTrack) 
+// EVT_SVSCROLLBAR_PAGEUP(SVID_SVVSB02, svListBoxCtrl::OnVsvScrollPageUp)
+// EVT_SVSCROLLBAR_PAGEDOWN(SVID_SVVSB02, svListBoxCtrl::OnVsvScrollPageDown)
 
-EVT_LEFT_DOWN(svListBoxCtrl::OnMouseLeftDown)
+// EVT_LEFT_DOWN(svListBoxCtrl::OnMouseLeftDown)
 // EVT_LEFT_UP(svListBoxCtrl::OnMouseLeftUp)
 // EVT_RIGHT_UP(svListBoxCtrl::OnMouseRightUp)
 // EVT_MOTION(svListBoxCtrl::OnMouseMotion)
 //EVT_MOTION(svListBoxCtrl::OnMouseMotion)
-EVT_MOUSEWHEEL(svListBoxCtrl::OnMouseWheel)
+// EVT_MOUSEWHEEL(svListBoxCtrl::OnMouseWheel)
 //EVT_LEAVE_WINDOW(svListBoxCtrl::OnMouseLeaveWindow)
 //EVT_m_bufText_EVENT(wxID_ANY, svListBoxCtrl::OnModified)
 END_EVENT_TABLE()
 
 
-svListBoxCtrl::svListBoxCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTAB_TRAVERSAL, const wxString& name = wxT("panel"))
-:wxWindow(parent, id, pos, size, style, name)
+svListBoxCtrl::svListBoxCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style, const wxString& name)
+:wxControl(parent, id, pos, size, style)
+// :wxWindow(parent, id, pos, size, style, name)
+// :wxFrame(parent, id, name, pos, size, style)
 {
     m_linesPerPage = 0;
 
@@ -84,6 +87,10 @@ svListBoxCtrl::svListBoxCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos
     m_font.SetPointSize(m_fontSize);
     m_charHeight = m_font.GetPixelSize().GetHeight();
 
+    m_bufferDC = NULL;
+
+    InitControls();
+
 }
 
 svListBoxCtrl::~svListBoxCtrl()
@@ -91,6 +98,39 @@ svListBoxCtrl::~svListBoxCtrl()
     if (m_vsb) delete m_vsb;
 
     if (m_bufferDC) delete m_bufferDC;
+}
+
+void svListBoxCtrl::InitControls(void)
+{
+    this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+    
+    wxBoxSizer* bSizer4;
+    bSizer4 = new wxBoxSizer( wxVERTICAL );
+    
+    m_lcHints = new wxListBox( this, ID_LBOX_LIST_BOX, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE|wxLB_HSCROLL );    bSizer4->Add( m_lcHints, 1, wxALL|wxEXPAND, 0 );
+    
+    this->SetSizer( bSizer4 );
+    this->Layout();
+    
+    this->Centre( wxBOTH );
+
+    m_lcHints->Bind(wxEVT_KEY_DOWN, &svListBoxCtrl::OnKeyDown, this);
+    m_lcHints->Bind(wxEVT_CHAR, &svListBoxCtrl::OnChar, this);
+
+
+    // DEBUG BEGIN
+    // m_lcHints->ClearAll();
+    m_lcHints->Clear();
+
+    wxArrayString as;
+    as.Add(_("test 01"));
+    as.Add(_("test 02"));
+    m_lcHints->InsertItems(as, 0);
+    if (as.GetCount()>0)
+        m_lcHints->SetSelection(0);
+
+    // DEBUG END
+
 }
 
 void svListBoxCtrl::OnErase(wxEraseEvent& evet)
@@ -112,6 +152,9 @@ void svListBoxCtrl::OnPaint(wxPaintEvent& event)
     }
     else
     {
+        wxCoord tw, th;
+        dc.GetSize (&tw, &th);
+
         dc.DrawText("Strange!", 0, 0);
     }
 
@@ -136,9 +179,64 @@ void svListBoxCtrl::OnSize(wxSizeEvent& event)
 
 }
 
+void svListBoxCtrl::OnKeyDown(wxKeyEvent& event)
+{
+
+    int key = event.GetKeyCode();
+    //wxChar ukey = event.GetUnicodeKey();
+
+    if (key==27) // ESC
+    {
+        Hide();
+    }
+    else if (key==WXK_UP)
+    {
+        int sel = m_lcHints->GetSelection();
+        if (sel>0)
+            --sel;
+        m_lcHints->SetSelection(sel);
+    }
+    else if (key==WXK_DOWN)
+    {
+        int max = m_lcHints->GetCount();
+        int sel = m_lcHints->GetSelection();
+        if (sel<max-1)
+            ++sel;
+        m_lcHints->SetSelection(sel);
+    }
+    // else if (key==WXK_RETURN || 
+    //          key==WXK_TAB)
+    // {
+    //     int selNo = m_lcHints->GetSelection();
+    //     if (selNo!=wxNOT_FOUND)
+    //     {
+    //         m_txtCtrl->DoTextInsertHint(m_lcHints->GetString(selNo));
+    //     }
+    //     Hide();
+    //     m_txtCtrl->SetFocus();
+    // }
+    else
+    {
+        // event.Skip();
+        // wxKeyEvent e;
+        // e = event;
+        GetParent()->ProcessWindowEvent(event); // passing the key event to  parent window(svTextEditorCtrl)
+        // wxLogMessage(wxString::Format("svTypeHintCtrl::OnKeyDown() %i %i", e.m_x, e.m_y));
+    }
+
+}
+
+
+void svListBoxCtrl::OnSetFocus(wxFocusEvent& event)
+{
+    m_lcHints->SetFocus();
+}
+
 void svListBoxCtrl::OnChar(wxKeyEvent& event)
 {
 
+    event.Skip();
+    GetParent()->ProcessWindowEvent(event); // passing the key event to  parent window(
     // svCommand* cmd;
     // cmd = NULL;
 

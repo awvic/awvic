@@ -46,6 +46,10 @@ set(ICU_I18N_LIBRARIES "d:/mylibrary/icu/lib/icudt.lib"
                        "d:/mylibrary/icu/lib/iculx.lib" 
                        "d:/mylibrary/icu/lib/icutu.lib" 
                        "d:/mylibrary/icu/lib/icuuc.lib")
+set(PYTHON_INCLUDE_DIR "c:/python35-32/include")
+set(PYTHON_LIBRARY "c:/python35-32/libs/python35.lib")
+# set(PYTHON_INCLUDE_DIR "c:/python34_win32/include")
+# set(PYTHON_LIBRARY "c:/python34_win32/libs/python34.lib")
 else()
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/home/octave/mycodes/wx/awvic/build_cmake")
 #set(CMAKE_MODULE_PATH ".")
@@ -70,16 +74,26 @@ set(ICU_I18N_LIBRARIES "/usr/local/lib/libicudata.so"
                        "/usr/local/lib/libiculx.so" 
                        "/usr/local/lib/libicutu.so" 
                        "/usr/local/lib/libicuuc.so")
+set(PYTHON_INCLUDE_DIR "D:/mylibrary/jsoncpp/include")
+set(PYTHON_LIBRARY "D:/mylibrary/jsoncpp/build/win32/debug/lib/jsoncpp.lib")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
 include_directories(${JSONCPP_INCLUDE_DIR})
+include_directories(${PYTHON_INCLUDE_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 
 ##---------------------------------------------------
 ## Please set your wxWidgets configuration here
 ##--------------------------------------------------- 
  
+set(wxwidgets_path "d:/wxWidgets-3.0.3")
+SET(WX_ROOT_DIR ${wxwidgets_path})
+SET(wxWidgets_CONFIGURATION mwsu)
+SET(wxWidgets_ROOT_DIR ${wxwidgets_path})
+# SET(wxWidgets_LIB_DIR ${wxwidgets_path}/lib/vc_x64_lib)
+SET(wxWidgets_LIB_DIR ${wxwidgets_path}/lib/vc_lib)
+
 # Here you can define what libraries of wxWidgets you need for your
 # application. You can figure out what libraries you need here;
 # http://www.wxwidgets.org/manuals/2.8/wx_librarieslist.html
@@ -182,7 +196,7 @@ add_executable(${TARGET} WIN32 ${SRCS})
 # set for us by the find script. If you need other libraries, you
 # can add them here as well. 
 #target_link_libraries(${target} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES}) 
-target_link_libraries(${TARGET} ${wxWidgets_LIBRARIES} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES} ${JSONCPP_LIBRARY})
+target_link_libraries(${TARGET} ${wxWidgets_LIBRARIES} ${ICU_LIBRARIES} ${ICU_I18N_LIBRARIES} ${JSONCPP_LIBRARY} ${PYTHON_LIBRARY})
 
 message( STATUS " ")
 message( STATUS "ICU_FOUND: " ${ICU_FOUND})

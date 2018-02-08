@@ -33,6 +33,7 @@
 #include "svCommandLineCtrl.h"
 #include "svBaseType.h"
 #include "svTypeHintCtrl.h"
+#include "svListBoxCtrl.h"
 
 using namespace std;
 
@@ -155,7 +156,9 @@ enum
     SVID_CTM_COPY,
     SVID_CTM_PASTE,
 
-    SVID_CMD_LINE
+    SVID_CMD_LINE,
+
+    SVID_LB01
 
 };
 
@@ -415,6 +418,7 @@ public:
     void HideTypeHint(void)
     {
         m_typeHintCtrl->Hide();
+        m_listBoxCtrl->Hide();
     }
 
     inline
@@ -582,6 +586,9 @@ private:
     svFindReplaceOption m_lastSearchOption; // last search option. << BAD practice of comment.
 
     svTypeHintCtrl *m_typeHintCtrl;         // Typing hint control.
+
+    // svTypeHintCtrl *m_listBoxCtrl;
+    svListBoxCtrl *m_listBoxCtrl;
 
 private:
     DECLARE_EVENT_TABLE()

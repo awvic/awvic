@@ -28,7 +28,8 @@ using namespace std;
 #define SVID_LISTBOX_DEFAULT_FONT_SIZE  12
 #define SVID_LISTBOX_ITEM_BORDER 30
 
-class svTextEditorCtrl;
+// class svTextEditorCtrl;
+// class svMainFrame; 
 
 // enum
 // {
@@ -109,14 +110,27 @@ enum
     SVID_LISTBOX_BOTH_SCB=3
 };
 
-class svListBoxCtrl : public wxWindow
+enum
+{
+    ID_LBOX_LIST_BOX=wxID_HIGHEST+1
+};
+
+
+// class svListBoxCtrl : public wxFrame
+// class svListBoxCtrl : public wxWindow
+class svListBoxCtrl : public wxControl
 {
 public:
-    svListBoxCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name);
+    svListBoxCtrl(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style = wxTAB_TRAVERSAL, const wxString& name = wxT("svListBoxCtrl"));
     ~svListBoxCtrl();
+
+    void InitControls(void);
+
     void OnErase(wxEraseEvent& evet);
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
+    void OnSetFocus(wxFocusEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnClose(wxCloseEvent& event);
 
@@ -208,6 +222,8 @@ public:
         return m_filter;
     }
 
+    
+
 private:
 
     svScrollBar *m_vsb;                // Vertical scrollbar.
@@ -233,6 +249,7 @@ private:
     int m_fontSize;
     int m_charHeight;
 
+    wxListBox* m_lcHints;
 
 private:
     DECLARE_EVENT_TABLE()
