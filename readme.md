@@ -2,7 +2,7 @@
 
 Awvic is a Text editor project which aim to clone a VI(M) by myself in the beginning. But in current status, it's almost nothing like a VI(M) clone but like a modern editor such Sublime text or Notepad++. Of course, there are still much functions to be add to making Awvic acting like a real professional editor.
 
-<img src="./bin/awvic.png" alt="weiqigo" width="680"/>
+<img src="./bin/awvic.png" alt="weiqigo"/>
 
 ## Features
 a. Syntax hilighting and folding.
